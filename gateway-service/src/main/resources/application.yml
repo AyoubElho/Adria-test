@@ -6,30 +6,50 @@ spring:
     name: gateway-service
   cloud:
     gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
       routes:
-        # Route 1: REST API Account Service
-        - id: account-service-rest
-          uri: http://localhost:8081
+        # Route 1: Direct /api/accounts/**
+        - id: account-service-direct
+          uri: lb://account-service
           predicates:
             - Path=/api/accounts/**
 
-        # Route 2: MCP Tool Endpoint Account Service
+        # Route 2: Prefixé avec le nom du service /account-service/** (avec StripPrefix=1)
+        - id: account-service-prefixed
+          uri: lb://account-service
+          predicates:
+            - Path=/account-service/**
+          filters:
+            - StripPrefix=1
+
+        # Route 3: MCP Tool Endpoint Account Service
         - id: account-service-mcp
-          uri: http://localhost:8081
+          uri: lb://account-service
           predicates:
             - Path=/account-mcp/**
           filters:
             - RewritePath=/account-mcp(?<segment>/?.*), /mcp$\{segment}
 
-        # Route 3: REST API Transaction Service
-        - id: transaction-service-rest
-          uri: http://localhost:8082
+        # Route 4: Direct /api/transactions/**
+        - id: transaction-service-direct
+          uri: lb://transaction-service
           predicates:
             - Path=/api/transactions/**
 
-        # Route 4: MCP Tool Endpoint Transaction Service
+        # Route 5: Prefixé avec le nom du service /transaction-service/** (avec StripPrefix=1)
+        - id: transaction-service-prefixed
+          uri: lb://transaction-service
+          predicates:
+            - Path=/transaction-service/**
+          filters:
+            - StripPrefix=1
+
+        # Route 6: MCP Tool Endpoint Transaction Service
         - id: transaction-service-mcp
-          uri: http://localhost:8082
+          uri: lb://transaction-service
           predicates:
             - Path=/transaction-mcp/**
           filters:
@@ -46,3 +66,10 @@ spring:
               - DELETE
               - OPTIONS
             allowedHeaders: "*"
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true

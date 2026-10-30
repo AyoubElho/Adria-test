@@ -46,10 +46,17 @@
             <artifactId>spring-boot-h2console</artifactId>
         </dependency>
 
-        <!-- Spring Cloud OpenFeign compatible with Spring Boot 4.1.2 -->
+        <!-- Spring Cloud OpenFeign -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <!-- Eureka Client for Discovery -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <version>5.0.2</version>
         </dependency>
 
         <!-- Resilience4j & Spring AOP for Circuit Breaker, Retry and Fallbacks -->
