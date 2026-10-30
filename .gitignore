@@ -31,3 +31,18 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Secrets and Environment ###
+.env
+.env.*
+!.env.example
+
+### LaTeX build artifacts ###
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+

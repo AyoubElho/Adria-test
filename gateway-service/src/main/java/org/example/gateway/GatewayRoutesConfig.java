@@ -11,6 +11,7 @@ public class GatewayRoutesConfig {
     @Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
+                // Account Service
                 .route("account-service-prefixed", r -> r
                         .path("/account-service/**")
                         .filters(f -> f.stripPrefix(1))
@@ -25,6 +26,7 @@ public class GatewayRoutesConfig {
                         .filters(f -> f.rewritePath("/account-mcp(?<segment>/?.*)", "/mcp${segment}"))
                         .uri("http://localhost:8081"))
 
+                // Transaction Service
                 .route("transaction-service-prefixed", r -> r
                         .path("/transaction-service/**")
                         .filters(f -> f.stripPrefix(1))
@@ -38,6 +40,16 @@ public class GatewayRoutesConfig {
                         .path("/transaction-mcp/**")
                         .filters(f -> f.rewritePath("/transaction-mcp(?<segment>/?.*)", "/mcp${segment}"))
                         .uri("http://localhost:8082"))
+
+                // Chatbot Service
+                .route("chatbot-service-prefixed", r -> r
+                        .path("/chatbot-service/**")
+                        .filters(f -> f.stripPrefix(1))
+                        .uri("http://localhost:8083"))
+
+                .route("chatbot-service-direct", r -> r
+                        .path("/api/chat/**")
+                        .uri("http://localhost:8083"))
 
                 .build();
     }
